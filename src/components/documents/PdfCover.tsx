@@ -60,7 +60,7 @@ function PdfCover({ pdfUrl, title }: PdfCoverProps) {
   }, [pdfUrl])
 
   return (
-    <div className="relative aspect-4/5 overflow-hidden rounded-xl border border-slate-200 bg-slate-950 shadow-[0_20px_45px_-30px_rgba(15,23,42,0.65)]">
+    <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-slate-200 bg-slate-950 shadow-[0_20px_45px_-30px_rgba(15,23,42,0.65)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_45%),linear-gradient(180deg,rgba(15,23,42,0.05),rgba(15,23,42,0.35))]" />
 
       {status !== 'ready' ? (

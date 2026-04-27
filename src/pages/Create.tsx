@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import type { Author } from '../types/author'
 import api from '../lib/api'
 import {
@@ -13,6 +13,8 @@ const Create = () => {
   const [authors, setAuthors] = useState<Author[]>([])
   const [title, setTitle] = useState<string>('')
   const [docUrl, setDocUrl] = useState<string>('')
+  const [abstract, setAbstract] = useState<string>('')
+  const navigate = useNavigate()
 
   const addAuthor = () => {
     setAuthors([...authors, { firstName: '', lastName: '', ci: '' }])
@@ -53,8 +55,10 @@ const Create = () => {
         title,
         authors,
         docUrl,
+        abstract,
       })
       toast.success('Documento creado exitosamente.')
+      navigate('/documents')
     } catch (error) {
       console.error(error)
       toast.error('Error al crear el documento.')
@@ -168,6 +172,21 @@ const Create = () => {
               </button>
             </div>
           ))}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="abstract"
+            className="text-sm font-medium text-slate-700"
+          >
+            Resumen (opcional)
+          </label>
+          <textarea
+            className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm placeholder-slate-400 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+            placeholder="Ingrese el resumen del documento"
+            value={abstract}
+            onChange={(e) => setAbstract(e.target.value)}
+          ></textarea>
         </div>
 
         <button

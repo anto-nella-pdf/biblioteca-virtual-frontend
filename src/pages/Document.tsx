@@ -2,12 +2,12 @@ import { Link, useParams } from 'react-router'
 import PdfCover from '../components/documents/PdfCover'
 import { formatDate } from '../utils/documents'
 import { useEffect, useState } from 'react'
-import type { Document } from '../types/document'
+import type { Document as TDocument } from '../types/document'
 import api from '../lib/api'
 
 const Document = () => {
   const { id } = useParams()
-  const [document, setDocument] = useState<Document | null>(null)
+  const [document, setDocument] = useState<TDocument | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -84,7 +84,12 @@ const Document = () => {
         ) : (
           <div>
             <PdfCover pdfUrl={document.docUrl} title={document.title} />
-            <a href={document.docUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block text-sm font-medium text-slate-900 transition hover:underline">
+            <a
+              href={document.docUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-sm font-medium text-slate-900 transition hover:underline"
+            >
               Ver PDF completo
             </a>
           </div>

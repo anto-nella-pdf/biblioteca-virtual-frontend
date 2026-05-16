@@ -59,10 +59,7 @@ const Documents = () => {
           </div>
 
           <p className="max-w-2xl text-sm leading-7 text-slate-500 sm:text-base">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa,
-            ducimus. Quaerat aperiam culpa vero rerum veritatis aspernatur sunt,
-            laborum fuga, dicta numquam, eligendi animi mollitia nemo molestias
-            cumque similique sint!
+            Bienvenidos a la Biblioteca virtual de la Unidad Educativa Nacional "Ricardo Montilla", un espacio para compartir conocimientos.
           </p>
         </div>
 

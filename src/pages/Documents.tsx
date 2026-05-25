@@ -1,24 +1,42 @@
 import { Link } from 'react-router'
 import DocumentCard from '../components/documents/DocumentCard'
-import { sortDocumentsByLeadAuthor } from '../utils/documents'
+import { sortDocumentsByLeadAuthor, normalizeString } from '../utils/documents'
 import { useEffect, useState } from 'react'
 import api from '../lib/api'
 import type { Document } from '../types/document'
 
 const Documents = () => {
   const [documents, setDocuments] = useState<Document[]>([])
+  const [filteredDocuments, setFilteredDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   const getTotalAuthors = () => {
     const authorsSet = new Set<string>()
     documents.forEach((document) => {
-      console.log(document)
       document.authors?.forEach((author) => {
-        const authorKey = `${author.firstName}-${author.lastName}`
+        const authorKey = normalizeString(
+          `${author.firstName}-${author.lastName}`,
+        )
         authorsSet.add(authorKey)
       })
     })
     return authorsSet.size
+  }
+
+  const filterDocuments = (query: string) => {
+    const lowerCaseQuery = normalizeString(query)
+    return documents.filter((document) => {
+      const titleMatch = normalizeString(document.title).includes(
+        lowerCaseQuery,
+      )
+      const authorsMatch = document.authors?.some((author) => {
+        const fullName = normalizeString(
+          `${author.firstName} ${author.lastName}`,
+        )
+        return fullName.includes(lowerCaseQuery)
+      })
+      return titleMatch || authorsMatch
+    })
   }
 
   useEffect(() => {
@@ -28,10 +46,10 @@ const Documents = () => {
       try {
         setLoading(true)
         const response = await api.get('/documents')
-        console.log('Documentos obtenidos:', response.data)
 
         if (isMounted) {
           setDocuments(sortDocumentsByLeadAuthor(response.data))
+          setFilteredDocuments(sortDocumentsByLeadAuthor(response.data))
         }
       } catch (error) {
         console.error('Error al obtener documentos:', error)
@@ -59,7 +77,8 @@ const Documents = () => {
           </div>
 
           <p className="max-w-2xl text-sm leading-7 text-slate-500 sm:text-base">
-            Bienvenidos a la Biblioteca virtual de la Unidad Educativa Nacional "Ricardo Montilla", un espacio para compartir conocimientos.
+            Bienvenidos a la Biblioteca virtual de la Unidad Educativa Nacional
+            "Ricardo Montilla", un espacio para compartir conocimientos.
           </p>
         </div>
 
@@ -87,22 +106,27 @@ const Documents = () => {
         </div>
       </header>
 
+      <input
+        type="text"
+        placeholder="Buscar documentos..."
+        className="rounded-lg border border-slate-200 px-4 py-3 w-full sm:w-auto"
+        onChange={(e) => setFilteredDocuments(filterDocuments(e.target.value))}
+      />
+
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {
-          loading ? (
-            <p className="col-span-full text-center text-sm text-slate-500">
-              Cargando documentos...
-            </p>
-          ) : documents.length === 0 ? (
-            <p className="col-span-full text-center text-sm text-slate-500">
-              No se encontraron documentos.
-            </p>
-          ) : (
-            documents.map((document) => (
-              <DocumentCard key={document._id} document={document} />
-            ))
-          )
-        }
+        {loading ? (
+          <p className="col-span-full text-center text-sm text-slate-500">
+            Cargando documentos...
+          </p>
+        ) : filteredDocuments.length === 0 ? (
+          <p className="col-span-full text-center text-sm text-slate-500">
+            No se encontraron documentos.
+          </p>
+        ) : (
+          filteredDocuments.map((document) => (
+            <DocumentCard key={document._id} document={document} />
+          ))
+        )}
       </div>
     </section>
   )

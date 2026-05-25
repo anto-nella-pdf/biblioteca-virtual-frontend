@@ -134,7 +134,7 @@ const Create = () => {
           </div>
 
           {authors.map((author, index) => (
-            <div key={index} className="flex gap-2">
+            <div key={index} className="grid gap-2 md:grid-cols-4">
               <input
                 type="text"
                 value={author.firstName}
@@ -166,7 +166,9 @@ const Create = () => {
               <button
                 type="button"
                 onClick={() => removeAuthor(index)}
-                className="inline-flex items-center rounded-lg border border-red-300 bg-red-100 px-3 py-1 text-sm font-medium text-red-600 shadow-sm transition hover:border-red-400 hover:bg-red-200 hover:text-red-900"
+                className="inline-flex items-center rounded-lg border border-red-300 bg-red-100 px-3 py-1 text-sm font-medium text-red-600 shadow-sm transition hover:border-red-400 hover:bg-red-200 hover:text-red-900 justify-self-end 
+                md:justify-self-start
+                "
               >
                 Eliminar
               </button>

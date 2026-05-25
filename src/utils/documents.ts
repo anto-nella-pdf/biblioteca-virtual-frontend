@@ -1,6 +1,14 @@
 import type { Author } from '../types/author'
 import type { Document } from '../types/document'
 
+export function normalizeString(input?: string) {
+  if (!input) return ''
+  return input
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+}
+
 export function sortAuthorsByLastName(authors: Author[]) {
   if (!authors) {
     return []

@@ -17,7 +17,6 @@ const Document = () => {
       try {
         setLoading(true)
         const response = await api.get(`/documents/${id}`)
-        console.log('Documento obtenido:', response.data)
 
         if (isMounted) {
           setDocument(response.data)
